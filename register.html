@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ลงทะเบียน</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 120, 170, 0.15),
+                    rgba(0, 80, 130, 0.55)
+                ),
+                url("background.jpg");
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+
+            background: rgba(255, 255, 255, 0.95);
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0078aa;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            color: #333;
+        }
+
+        .hint {
+            font-size: 14px;
+            font-weight: normal;
+            color: #777;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 13px 15px;
+
+            font-size: 16px;
+
+            border: 2px solid #d5d5d5;
+            border-radius: 10px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #008fc4;
+        }
+
+        .submit-button {
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 10px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: #008fc4;
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .submit-button:hover {
+            background: #00739e;
+
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-button {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: #0078aa;
+
+            text-decoration: none;
+
+            font-size: 16px;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        #message {
+            text-align: center;
+
+            margin-top: 18px;
+
+            font-weight: bold;
+
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>ลงทะเบียน</h1>
+
+        <form id="registerForm">
+
+            <!-- ชื่อ -->
+            <div class="form-group">
+
+                <label for="firstname">
+                    ชื่อ
+                </label>
+
+                <input
+                    type="text"
+                    id="firstname"
+                    placeholder="กรอกชื่อ"
+                    required
+                >
+
+            </div>
+
+
+            <!-- นามสกุล -->
+            <div class="form-group">
+
+                <label for="lastname">
+                    นามสกุล
+                </label>
+
+                <input
+                    type="text"
+                    id="lastname"
+                    placeholder="กรอกนามสกุล"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ชื่อเล่น -->
+            <div class="form-group">
+
+                <label for="nickname">
+                    ชื่อเล่น
+                </label>
+
+                <input
+                    type="text"
+                    id="nickname"
+                    placeholder="กรอกชื่อเล่น"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ชื่อสถานศึกษา -->
+            <div class="form-group">
+
+                <label for="school">
+                    ชื่อสถานศึกษา
+                </label>
+
+                <input
+                    type="text"
+                    id="school"
+                    placeholder="กรอกชื่อสถานศึกษา"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ระดับชั้น -->
+            <div class="form-group">
+
+                <label for="grade">
+                    ระดับชั้นการศึกษา
+                </label>
+
+                <select
+                    id="grade"
+                    required
+                >
+
+                    <option value="">
+                        -- เลือกระดับชั้น --
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 1">
+                        ประถมศึกษาปีที่ 1
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 2">
+                        ประถมศึกษาปีที่ 2
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 3">
+                        ประถมศึกษาปีที่ 3
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 4">
+                        ประถมศึกษาปีที่ 4
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 5">
+                        ประถมศึกษาปีที่ 5
+                    </option>
+
+                    <option value="ประถมศึกษาปีที่ 6">
+                        ประถมศึกษาปีที่ 6
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 1">
+                        มัธยมศึกษาปีที่ 1
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 2">
+                        มัธยมศึกษาปีที่ 2
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 3">
+                        มัธยมศึกษาปีที่ 3
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 4">
+                        มัธยมศึกษาปีที่ 4
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 5">
+                        มัธยมศึกษาปีที่ 5
+                    </option>
+
+                    <option value="มัธยมศึกษาปีที่ 6">
+                        มัธยมศึกษาปีที่ 6
+                    </option>
+
+                    <option value="อื่น ๆ">
+                        อื่น ๆ
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- อายุ -->
+            <div class="form-group">
+
+                <label for="age">
+                    อายุ
+                </label>
+
+                <input
+                    type="number"
+                    id="age"
+                    placeholder="กรอกอายุ"
+                    min="1"
+                    max="100"
+                    required
+                >
+
+            </div>
+
+
+            <!-- อีเมล -->
+            <div class="form-group">
+
+                <label for="email">
+                    อีเมล
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="example@email.com"
+                    required
+                >
+
+            </div>
+
+
+            <!-- เบอร์โทร -->
+            <div class="form-group">
+
+                <label for="phone">
+
+                    เบอร์โทรศัพท์
+
+                    <span class="hint">
+                        (ถ้าไม่มีเบอร์โทร ให้ใส่ -)
+                    </span>
+
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="กรอกเบอร์โทรศัพท์ หรือ -"
+                    maxlength="10"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ปุ่ม -->
+            <button
+                type="submit"
+                class="submit-button"
+                id="submitButton"
+            >
+                ลงทะเบียน
+            </button>
+
+        </form>
+
+
+        <!-- ข้อความแจ้งเตือน -->
+        <p id="message"></p>
+
+
+        <!-- กลับหน้าหลัก -->
+        <a
+            href="index.html"
+            class="back-button"
+        >
+            ← กลับหน้าหลัก
+        </a>
+
+    </div>
+
+
+    <script>
+
+        /* ==========================================
+           Google Apps Script URL
+           ========================================== */
+
+        const scriptURL =
+            "https://script.google.com/macros/s/AKfycbyZjSfrmEauYQkqOagizW2aq6wi7j9ZLrHnRX9frRfM35TqwWCEA1O54COR_15jo3nDiA/exec";
+
+
+        const form =
+            document.getElementById("registerForm");
+
+
+        const message =
+            document.getElementById("message");
+
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+
+        /* ==========================================
+           เมื่อกดลงทะเบียน
+           ========================================== */
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                /* ==========================================
+                   รับค่าเบอร์โทร
+                   ========================================== */
+
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+
+                /* ==========================================
+                   ตรวจสอบเบอร์โทร
+                   
+                   อนุญาต:
+                   1. ตัวเลข 10 หลัก
+                   2. เครื่องหมาย -
+                   ========================================== */
+
+                if (
+                    phone !== "-" &&
+                    !/^\d{10}$/.test(phone)
+                ) {
+
+                    message.textContent =
+                        "เบอร์โทรศัพท์ต้องมี 10 หลัก หรือใส่ - หากไม่มีเบอร์โทร";
+
+                    message.style.color =
+                        "red";
+
+                    return;
+                }
+
+
+                /* ==========================================
+                   แสดงสถานะกำลังส่ง
+                   ========================================== */
+
+                message.textContent =
+                    "กำลังส่งข้อมูล...";
+
+                message.style.color =
+                    "#0078aa";
+
+
+                submitButton.disabled =
+                    true;
+
+
+                /* ==========================================
+                   เตรียมข้อมูล
+                   ========================================== */
+
+                const data = {
+
+                    firstname:
+                        document
+                            .getElementById("firstname")
+                            .value
+                            .trim(),
+
+                    lastname:
+                        document
+                            .getElementById("lastname")
+                            .value
+                            .trim(),
+
+                    nickname:
+                        document
+                            .getElementById("nickname")
+                            .value
+                            .trim(),
+
+                    school:
+                        document
+                            .getElementById("school")
+                            .value
+                            .trim(),
+
+                    grade:
+                        document
+                            .getElementById("grade")
+                            .value,
+
+                    age:
+                        document
+                            .getElementById("age")
+                            .value,
+
+                    email:
+                        document
+                            .getElementById("email")
+                            .value
+                            .trim(),
+
+                    phone:
+                        phone
+
+                };
+
+
+                try {
+
+                    /* ==========================================
+                       ส่งข้อมูลไป Google Apps Script
+                       ========================================== */
+
+                    await fetch(
+                        scriptURL,
+                        {
+                            method: "POST",
+
+                            mode: "no-cors",
+
+                            body:
+                                JSON.stringify(data)
+                        }
+                    );
+
+
+                    /* ==========================================
+                       สำเร็จ
+                       ========================================== */
+
+                    message.textContent =
+                        "ลงทะเบียนสำเร็จ! 🎉";
+
+                    message.style.color =
+                        "green";
+
+
+                    form.reset();
+
+
+                } catch (error) {
+
+                    /* ==========================================
+                       เกิดข้อผิดพลาด
+                       ========================================== */
+
+                    console.error(error);
+
+                    message.textContent =
+                        "ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่";
+
+                    message.style.color =
+                        "red";
+
+                }
+
+
+                submitButton.disabled =
+                    false;
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
