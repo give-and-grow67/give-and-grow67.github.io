@@ -1,11 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ลงทะเบียน</title>
+    <title>ลงทะเบียน | Give &amp; Grow</title>
 
     <style>
         * {
@@ -21,157 +20,299 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
             min-height: 100vh;
+            font-family: Arial, "Noto Sans Thai", sans-serif;
 
-            background-image:
-                linear-gradient(
-                    rgba(0, 120, 170, 0.15),
-                    rgba(0, 80, 130, 0.55)
-                ),
-                url("background.jpg");
+            /* เปลี่ยนเฉพาะพื้นหลัง */
+            background: #071a2b;
 
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            padding: 30px 15px;
 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
 
-            padding: 30px 15px;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            position: relative;
         }
 
-        .container {
+        /* วิดีโอพื้นหลัง */
+        #bg-video {
+            position: fixed;
+            inset: 0;
             width: 100%;
-            max-width: 600px;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            pointer-events: none;
+        }
 
-            background: rgba(255, 255, 255, 0.95);
+        /* แสงสีฟ้าเดิม */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
 
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(0, 255, 255, 0.10),
+                    transparent 38%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(0, 150, 255, 0.12),
+                    transparent 40%
+                );
+        }
+
+        /* กล่องลงทะเบียนเดิม */
+        .box {
+            position: relative;
+            z-index: 1;
+
+            width: 500px;
+            max-width: 100%;
+
+            margin: 20px auto;
             padding: 35px;
 
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.85);
             border-radius: 25px;
 
             box-shadow:
-                0 15px 40px rgba(0, 0, 0, 0.25);
+                0 15px 40px rgba(0, 0, 0, 0.25),
+                0 0 25px rgba(0, 220, 255, 0.12);
+
+            opacity: 0;
+            animation: contentEnter 0.75s cubic-bezier(.2, .8, .2, 1) forwards;
         }
 
+        /* หัวข้อ */
         h1 {
             text-align: center;
             color: #0078aa;
             margin-bottom: 25px;
+
+            animation: titleEnter 0.7s ease-out 0.15s both;
         }
 
-        .form-group {
-            margin-bottom: 18px;
+        /* ช่องกรอกข้อมูลเดิม */
+        .group {
+            margin-bottom: 15px;
+
+            opacity: 0;
+            animation: fieldEnter 0.45s ease-out both;
         }
+
+        .group:nth-of-type(1) { animation-delay: 0.15s; }
+        .group:nth-of-type(2) { animation-delay: 0.20s; }
+        .group:nth-of-type(3) { animation-delay: 0.25s; }
+        .group:nth-of-type(4) { animation-delay: 0.30s; }
+        .group:nth-of-type(5) { animation-delay: 0.35s; }
+        .group:nth-of-type(6) { animation-delay: 0.40s; }
+        .group:nth-of-type(7) { animation-delay: 0.45s; }
+        .group:nth-of-type(8) { animation-delay: 0.50s; }
 
         label {
             display: block;
-            margin-bottom: 7px;
-
-            font-size: 16px;
+            margin-bottom: 6px;
             font-weight: bold;
-
             color: #333;
-        }
-
-        .hint {
-            font-size: 14px;
-            font-weight: normal;
-            color: #777;
         }
 
         input,
         select {
             width: 100%;
+            padding: 12px;
 
-            padding: 13px 15px;
-
-            font-size: 16px;
-
-            border: 2px solid #d5d5d5;
+            border: 2px solid #ddd;
             border-radius: 10px;
 
-            outline: none;
+            font-size: 16px;
+            font-family: inherit;
 
-            transition: 0.2s;
+            outline: none;
+            background-color: #fff;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
         }
 
         input:focus,
         select:focus {
             border-color: #008fc4;
+
+            box-shadow:
+                0 0 0 3px rgba(0, 143, 196, 0.15),
+                0 0 12px rgba(0, 200, 255, 0.10);
         }
 
-        .submit-button {
+        /* ปุ่มลงทะเบียนเดิม */
+        button {
             width: 100%;
-
-            padding: 15px;
-
-            margin-top: 10px;
+            padding: 14px;
+            margin-top: 5px;
 
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
 
             background: #008fc4;
             color: white;
 
             font-size: 18px;
             font-weight: bold;
+            font-family: inherit;
 
             cursor: pointer;
 
-            transition: 0.2s;
+            box-shadow: 0 5px 14px rgba(0, 143, 196, 0.20);
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
-        .submit-button:hover {
-            background: #00739e;
-
+        button:hover:not(:disabled) {
+            background: #00729e;
             transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(0, 143, 196, 0.30),
+                0 0 15px rgba(0, 220, 255, 0.15);
         }
 
-        .submit-button:disabled {
+        button:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
             background: #999;
             cursor: not-allowed;
-            transform: none;
+            box-shadow: none;
         }
 
-        .back-button {
+        /* ลิงก์กลับหน้าหลักเดิม */
+        .back {
             display: block;
-
             text-align: center;
-
             margin-top: 15px;
 
             color: #0078aa;
-
             text-decoration: none;
 
-            font-size: 16px;
+            transition:
+                color 0.2s ease,
+                transform 0.2s ease;
         }
 
-        .back-button:hover {
-            text-decoration: underline;
+        .back:hover {
+            color: #00a4d6;
         }
 
-        #message {
+        /* ข้อความแจ้งเตือนเดิม */
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+
+            border-radius: 10px;
             text-align: center;
-
-            margin-top: 18px;
-
             font-weight: bold;
-
-            line-height: 1.5;
         }
 
-        @media (max-width: 600px) {
+        .success {
+            display: block;
+            background: #dff5e5;
+            color: #18743a;
+        }
 
-            .container {
+        .error {
+            display: block;
+            background: #ffe2e2;
+            color: #b00020;
+        }
+
+        /* แอนิเมชันเดิม */
+        @keyframes contentEnter {
+            from {
+                opacity: 0;
+                transform: translateY(35px) scale(0.96);
+                filter: blur(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes titleEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fieldEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* รองรับมือถือเดิม */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .box {
                 padding: 25px 20px;
+                margin: 10px auto;
+                border-radius: 20px;
             }
 
             h1 {
-                font-size: 26px;
+                font-size: 28px;
+            }
+        }
+
+        /* รองรับผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหวเดิม */
+        @media (prefers-reduced-motion: reduce) {
+            .box,
+            h1,
+            .group {
+                animation: none;
+                opacity: 1;
+                filter: none;
+                transform: none;
+            }
+
+            input,
+            select,
+            button,
+            .back {
+                transition: none;
             }
         }
     </style>
@@ -179,432 +320,195 @@
 
 <body>
 
-    <div class="container">
+    <!-- พื้นหลังวิดีโอ: ส่วนนี้คือส่วนที่เพิ่มเข้ามา -->
+    <video id="bg-video" autoplay muted loop playsinline aria-hidden="true">
+        <source src="./background_muted.mp4" type="video/mp4">
+    </video>
+
+    <div class="box">
 
         <h1>ลงทะเบียน</h1>
 
         <form id="registerForm">
 
-            <!-- ชื่อ -->
-            <div class="form-group">
-
-                <label for="firstname">
-                    ชื่อ
-                </label>
-
+            <div class="group">
+                <label for="firstName">ชื่อ</label>
                 <input
+                    id="firstName"
                     type="text"
-                    id="firstname"
                     placeholder="กรอกชื่อ"
                     required
                 >
-
             </div>
 
-
-            <!-- นามสกุล -->
-            <div class="form-group">
-
-                <label for="lastname">
-                    นามสกุล
-                </label>
-
+            <div class="group">
+                <label for="lastName">นามสกุล</label>
                 <input
+                    id="lastName"
                     type="text"
-                    id="lastname"
                     placeholder="กรอกนามสกุล"
                     required
                 >
-
             </div>
 
-
-            <!-- ชื่อเล่น -->
-            <div class="form-group">
-
-                <label for="nickname">
-                    ชื่อเล่น
-                </label>
-
+            <div class="group">
+                <label for="nickname">ชื่อเล่น</label>
                 <input
-                    type="text"
                     id="nickname"
+                    type="text"
                     placeholder="กรอกชื่อเล่น"
                     required
                 >
-
             </div>
 
-
-            <!-- ชื่อสถานศึกษา -->
-            <div class="form-group">
-
-                <label for="school">
-                    ชื่อสถานศึกษา
-                </label>
-
+            <div class="group">
+                <label for="school">ชื่อสถานศึกษา</label>
                 <input
-                    type="text"
                     id="school"
+                    type="text"
                     placeholder="กรอกชื่อสถานศึกษา"
                     required
                 >
-
             </div>
 
+            <div class="group">
+                <label for="level">ระดับชั้น</label>
 
-            <!-- ระดับชั้น -->
-            <div class="form-group">
+                <select id="level" required>
+                    <option value="">-- เลือกระดับชั้น --</option>
 
-                <label for="grade">
-                    ระดับชั้นการศึกษา
-                </label>
+                    <option>ประถมศึกษาปีที่ 1</option>
+                    <option>ประถมศึกษาปีที่ 2</option>
+                    <option>ประถมศึกษาปีที่ 3</option>
+                    <option>ประถมศึกษาปีที่ 4</option>
+                    <option>ประถมศึกษาปีที่ 5</option>
+                    <option>ประถมศึกษาปีที่ 6</option>
 
-                <select
-                    id="grade"
-                    required
-                >
-
-                    <option value="">
-                        -- เลือกระดับชั้น --
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 1">
-                        ประถมศึกษาปีที่ 1
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 2">
-                        ประถมศึกษาปีที่ 2
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 3">
-                        ประถมศึกษาปีที่ 3
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 4">
-                        ประถมศึกษาปีที่ 4
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 5">
-                        ประถมศึกษาปีที่ 5
-                    </option>
-
-                    <option value="ประถมศึกษาปีที่ 6">
-                        ประถมศึกษาปีที่ 6
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 1">
-                        มัธยมศึกษาปีที่ 1
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 2">
-                        มัธยมศึกษาปีที่ 2
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 3">
-                        มัธยมศึกษาปีที่ 3
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 4">
-                        มัธยมศึกษาปีที่ 4
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 5">
-                        มัธยมศึกษาปีที่ 5
-                    </option>
-
-                    <option value="มัธยมศึกษาปีที่ 6">
-                        มัธยมศึกษาปีที่ 6
-                    </option>
-
-                    <option value="อื่น ๆ">
-                        อื่น ๆ
-                    </option>
-
+                    <option>มัธยมศึกษาปีที่ 1</option>
+                    <option>มัธยมศึกษาปีที่ 2</option>
+                    <option>มัธยมศึกษาปีที่ 3</option>
+                    <option>มัธยมศึกษาปีที่ 4</option>
+                    <option>มัธยมศึกษาปีที่ 5</option>
+                    <option>มัธยมศึกษาปีที่ 6</option>
                 </select>
-
             </div>
 
-
-            <!-- อายุ -->
-            <div class="form-group">
-
-                <label for="age">
-                    อายุ
-                </label>
-
+            <div class="group">
+                <label for="age">อายุ</label>
                 <input
-                    type="number"
                     id="age"
-                    placeholder="กรอกอายุ"
+                    type="number"
                     min="1"
                     max="100"
+                    placeholder="กรอกอายุ"
                     required
                 >
-
             </div>
 
-
-            <!-- อีเมล -->
-            <div class="form-group">
-
-                <label for="email">
-                    อีเมล
-                </label>
-
+            <div class="group">
+                <label for="email">อีเมล</label>
                 <input
-                    type="email"
                     id="email"
+                    type="email"
                     placeholder="example@email.com"
                     required
                 >
-
             </div>
 
-
-            <!-- เบอร์โทร -->
-            <div class="form-group">
-
-                <label for="phone">
-
-                    เบอร์โทรศัพท์
-
-                    <span class="hint">
-                        (ถ้าไม่มีเบอร์โทร ให้ใส่ -)
-                    </span>
-
-                </label>
-
+            <div class="group">
+                <label for="phone">เบอร์โทรศัพท์</label>
                 <input
-                    type="text"
                     id="phone"
+                    type="text"
                     placeholder="กรอกเบอร์โทรศัพท์ หรือ -"
-                    maxlength="10"
                     required
                 >
-
             </div>
 
-
-            <!-- ปุ่ม -->
-            <button
-                type="submit"
-                class="submit-button"
-                id="submitButton"
-            >
+            <button type="submit" id="submitButton">
                 ลงทะเบียน
             </button>
 
+            <div id="message" class="message"></div>
+
         </form>
 
-
-        <!-- ข้อความแจ้งเตือน -->
-        <p id="message"></p>
-
-
-        <!-- กลับหน้าหลัก -->
-        <a
-            href="index.html"
-            class="back-button"
-        >
+        <a href="index.html" class="back">
             ← กลับหน้าหลัก
         </a>
 
     </div>
 
-
     <script>
+        // URL Web App ระบบลงทะเบียนเดิม
+        const SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbyhsCJSGgvfyIM05HtWiPCGDnv7Lnm6l2M3U2vtpcV9czP5F5m2e5vkPSaci6w--jOr/exec";
 
-        /* ==========================================
-           Google Apps Script URL
-           ========================================== */
+        const form = document.getElementById("registerForm");
+        const button = document.getElementById("submitButton");
+        const message = document.getElementById("message");
 
-        const scriptURL =
-            "https://script.google.com/macros/s/AKfycbyZjSfrmEauYQkqOagizW2aq6wi7j9ZLrHnRX9frRfM35TqwWCEA1O54COR_15jo3nDiA/exec";
+        // เมื่อกดลงทะเบียน
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
 
+            const data = {
+                firstName: document.getElementById("firstName").value.trim(),
+                lastName: document.getElementById("lastName").value.trim(),
+                nickname: document.getElementById("nickname").value.trim(),
+                school: document.getElementById("school").value.trim(),
+                level: document.getElementById("level").value,
+                age: document.getElementById("age").value,
+                email: document.getElementById("email").value.trim(),
+                phone: document.getElementById("phone").value.trim()
+            };
 
-        const form =
-            document.getElementById("registerForm");
+            button.disabled = true;
+            button.textContent = "กำลังบันทึก...";
 
+            showMessage("กำลังบันทึกข้อมูล...", "success");
 
-        const message =
-            document.getElementById("message");
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify(data)
+                });
 
+                const result = await response.json();
 
-        const submitButton =
-            document.getElementById("submitButton");
-
-
-        /* ==========================================
-           เมื่อกดลงทะเบียน
-           ========================================== */
-
-        form.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-
-                /* ==========================================
-                   รับค่าเบอร์โทร
-                   ========================================== */
-
-                const phone =
-                    document
-                        .getElementById("phone")
-                        .value
-                        .trim();
-
-
-                /* ==========================================
-                   ตรวจสอบเบอร์โทร
-                   
-                   อนุญาต:
-                   1. ตัวเลข 10 หลัก
-                   2. เครื่องหมาย -
-                   ========================================== */
-
-                if (
-                    phone !== "-" &&
-                    !/^\d{10}$/.test(phone)
-                ) {
-
-                    message.textContent =
-                        "เบอร์โทรศัพท์ต้องมี 10 หลัก หรือใส่ - หากไม่มีเบอร์โทร";
-
-                    message.style.color =
-                        "red";
-
-                    return;
-                }
-
-
-                /* ==========================================
-                   แสดงสถานะกำลังส่ง
-                   ========================================== */
-
-                message.textContent =
-                    "กำลังส่งข้อมูล...";
-
-                message.style.color =
-                    "#0078aa";
-
-
-                submitButton.disabled =
-                    true;
-
-
-                /* ==========================================
-                   เตรียมข้อมูล
-                   ========================================== */
-
-                const data = {
-
-                    firstname:
-                        document
-                            .getElementById("firstname")
-                            .value
-                            .trim(),
-
-                    lastname:
-                        document
-                            .getElementById("lastname")
-                            .value
-                            .trim(),
-
-                    nickname:
-                        document
-                            .getElementById("nickname")
-                            .value
-                            .trim(),
-
-                    school:
-                        document
-                            .getElementById("school")
-                            .value
-                            .trim(),
-
-                    grade:
-                        document
-                            .getElementById("grade")
-                            .value,
-
-                    age:
-                        document
-                            .getElementById("age")
-                            .value,
-
-                    email:
-                        document
-                            .getElementById("email")
-                            .value
-                            .trim(),
-
-                    phone:
-                        phone
-
-                };
-
-
-                try {
-
-                    /* ==========================================
-                       ส่งข้อมูลไป Google Apps Script
-                       ========================================== */
-
-                    await fetch(
-                        scriptURL,
-                        {
-                            method: "POST",
-
-                            mode: "no-cors",
-
-                            body:
-                                JSON.stringify(data)
-                        }
-                    );
-
-
-                    /* ==========================================
-                       สำเร็จ
-                       ========================================== */
-
-                    message.textContent =
-                        "ลงทะเบียนสำเร็จ! 🎉";
-
-                    message.style.color =
-                        "green";
-
-
+                if (result.success) {
+                    showMessage("ลงทะเบียนสำเร็จแล้ว 🎉", "success");
                     form.reset();
-
-
-                } catch (error) {
-
-                    /* ==========================================
-                       เกิดข้อผิดพลาด
-                       ========================================== */
-
-                    console.error(error);
-
-                    message.textContent =
-                        "ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่";
-
-                    message.style.color =
-                        "red";
-
+                } else {
+                    showMessage(
+                        result.message || "ไม่สามารถบันทึกข้อมูลได้",
+                        "error"
+                    );
                 }
 
+            } catch (error) {
+                console.error(error);
 
-                submitButton.disabled =
-                    false;
+                showMessage(
+                    "เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาตรวจสอบ Web App",
+                    "error"
+                );
 
+            } finally {
+                button.disabled = false;
+                button.textContent = "ลงทะเบียน";
             }
-        );
+        });
 
+        // แสดงข้อความแจ้งเตือนเดิม
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = "message " + type;
+        }
     </script>
 
 </body>
-
 </html>
