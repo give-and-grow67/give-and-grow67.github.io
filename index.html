@@ -1,217 +1,377 @@
+
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Give & Grow</title>
+  <title>Give & Grow</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            min-height: 100vh;
-        }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #000;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
+    /* วิดีโอพื้นหลัง */
+    #bg-video {
+      position: fixed;
+      inset: 0;
 
-        /* พื้นหลังเต็มหน้าจอ */
-        .page {
-            position: fixed;
+      width: 100%;
+      height: 100%;
 
-            top: 0;
-            left: 0;
+      object-fit: cover;
+      object-position: center;
 
-            width: 100vw;
-            height: 100vh;
+      filter: none;
+      opacity: 1;
 
-            background-image:
-                linear-gradient(
-                    rgba(0, 120, 170, 0.15),
-                    rgba(0, 80, 130, 0.55)
-                ),
-                url("background.jpg");
+      z-index: 0;
+      pointer-events: none;
+    }
 
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
+    /* ชั้นปรับความมืดของพื้นหลัง */
+    .overlay {
+      position: fixed;
+      inset: 0;
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      background: rgba(0, 0, 0, 0.08);
 
-        /* กลุ่มปุ่ม */
-        .buttons {
-            width: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    /* พื้นที่วางปุ่ม */
+    .menu {
+      position: relative;
+      z-index: 2;
 
-            gap: 100px;
+      width: 100%;
+      height: 100vh;
 
-            padding: 20px;
-        }
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        /* ปุ่ม */
-        .button {
-            width: 340px;
+      gap: clamp(15px, 3vw, 50px);
+      padding: 20px;
+    }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    /* ปุ่มแต่ละปุ่ม */
+    .menu-button {
+      display: block;
+      position: relative;
 
-            background: transparent;
-            border: none;
-            outline: none;
-            box-shadow: none;
+      width: min(27vw, 360px);
+      max-width: 360px;
+      min-width: 0;
 
-            text-decoration: none;
-            cursor: pointer;
+      border: none;
+      outline: none;
+      background: transparent;
 
-            transition: transform 0.3s ease;
-        }
+      cursor: pointer;
+      text-decoration: none;
 
-        /* รูปปุ่ม */
-        .icon-image {
-            width: 320px;
-            height: 320px;
+      transform-style: preserve-3d;
+      will-change: transform, filter;
 
-            object-fit: contain;
-            display: block;
+      transition:
+        transform 0.25s cubic-bezier(.2, .8, .2, 1),
+        filter 0.25s ease;
 
-            transition:
-                transform 0.3s ease,
-                filter 0.3s ease;
-        }
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        /* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
-        .button:hover {
-            transform: translateY(-10px);
-        }
+    /* รูปบนปุ่ม */
+    .menu-button img {
+      display: block;
 
-        .button:hover .icon-image {
-            transform: scale(1.08);
+      width: 100%;
+      height: auto;
 
-            filter: drop-shadow(
-                0 12px 15px rgba(0, 0, 0, 0.35)
-            );
-        }
+      object-fit: contain;
 
-        /* เอฟเฟกต์ตอนกด */
-        .button:active {
-            transform: scale(0.94);
-        }
+      user-select: none;
+      -webkit-user-drag: none;
 
-        /* หน้าจอขนาดกลาง */
-        @media (max-width: 1200px) {
+      filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.18))
+              drop-shadow(0 14px 18px rgba(0, 0, 0, 0.22));
 
-            .buttons {
-                gap: 40px;
-            }
+      transition: filter 0.25s ease;
+    }
 
-            .button {
-                width: 280px;
-            }
+    /* เอฟเฟกต์เมื่อเอาเมาส์ชี้ */
+    .menu-button:hover {
+      transform:
+        perspective(800px)
+        translateY(-14px)
+        translateZ(25px)
+        rotateX(5deg)
+        scale(1.06);
 
-            .icon-image {
-                width: 270px;
-                height: 270px;
-            }
-        }
+      filter: brightness(1.08);
+    }
 
-        /* หน้าจอเล็ก */
-        @media (max-width: 900px) {
+    .menu-button:hover img {
+      filter: drop-shadow(0 15px 0 rgba(0, 0, 0, 0.15))
+              drop-shadow(0 25px 25px rgba(0, 0, 0, 0.3));
+    }
 
-            body {
-                overflow-y: auto;
-            }
+    /* เอฟเฟกต์ตอนกด */
+    .menu-button:active {
+      transform:
+        perspective(800px)
+        translateY(4px)
+        scale(0.94);
 
-            .page {
-                position: relative;
+      filter: brightness(0.95);
+      transition: transform 0.08s ease;
+    }
 
-                width: 100%;
-                min-height: 100vh;
-                height: auto;
+    /* เอฟเฟกต์เด้ง */
+    @keyframes popupBounce {
+      0% {
+        transform: translateY(0) scale(1);
+      }
 
-                padding: 40px 0;
-            }
+      35% {
+        transform: translateY(-17px) scale(1.07);
+      }
 
-            .buttons {
-                flex-direction: column;
-                gap: 35px;
-            }
+      60% {
+        transform: translateY(3px) scale(0.98);
+      }
 
-            .button {
-                width: auto;
-            }
+      80% {
+        transform: translateY(-5px) scale(1.02);
+      }
 
-            .icon-image {
-                width: 280px;
-                height: 280px;
-            }
-        }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
 
-        /* โทรศัพท์ */
-        @media (max-width: 500px) {
+    .menu-button.bounce {
+      animation: popupBounce 0.48s ease;
+    }
 
-            .icon-image {
-                width: 240px;
-                height: 240px;
-            }
-        }
-    </style>
+    /* หน้าจอแท็บเล็ต */
+    @media (max-width: 900px) {
+      .menu {
+        gap: 16px;
+      }
+
+      .menu-button {
+        width: 30vw;
+      }
+    }
+
+    /* หน้าจอมือถือ */
+    @media (max-width: 600px) {
+      .menu {
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        padding: 15px;
+      }
+
+      .menu-button {
+        width: min(65vw, 260px);
+      }
+
+      .menu-button:hover {
+        transform: translateY(-5px) scale(1.03);
+      }
+    }
+
+    /* ลดการเคลื่อนไหวตามการตั้งค่าของผู้ใช้ */
+    @media (prefers-reduced-motion: reduce) {
+      .menu-button,
+      .menu-button img {
+        transition: none;
+      }
+
+      .menu-button.bounce {
+        animation: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="page">
+  <!-- วิดีโอพื้นหลัง -->
+  <video
+    id="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+  >
+    <source src="background_muted.mp4" type="video/mp4">
+    เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
+  </video>
 
-        <div class="buttons">
+  <div class="overlay"></div>
 
-            <!-- เกม -->
-            <a class="button" href="#">
-                <img
-                    src="game.png"
-                    class="icon-image"
-                    alt="เข้าเกม"
-                >
-            </a>
+  <!-- ปุ่มเมนู -->
+  <main class="menu">
 
-            <!-- ลงทะเบียน -->
-            <a class="button" href="register.html">
-                <img
-                    src="register.png"
-                    class="icon-image"
-                    alt="ลงทะเบียน"
-                >
-            </a>
+    <a
+      class="menu-button"
+      href="waiting-game.html"
+      aria-label="เล่นเกม"
+    >
+      <img src="game.png" alt="Game">
+    </a>
 
-            <!-- แชร์ -->
-            <a class="button" href="#">
-                <img
-                    src="share.png"
-                    class="icon-image"
-                    alt="แชร์กิจกรรม"
-                >
-            </a>
+    <a
+      class="menu-button"
+      href="register.html"
+      aria-label="ลงทะเบียน"
+    >
+      <img src="register.png" alt="Register">
+    </a>
 
-        </div>
+    <a
+      class="menu-button"
+      href="share.html"
+      aria-label="แบ่งปัน"
+    >
+      <img src="share.png" alt="Share">
+    </a>
 
-    </div>
+  </main>
+
+  <script>
+    // เล่นเสียงด้วย Web Audio API
+    // ไม่ต้องใช้ไฟล์เสียงเพิ่มเติม
+
+    let audioContext = null;
+
+    function getAudioContext() {
+      if (!audioContext) {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) {
+          return null;
+        }
+
+        audioContext = new AudioContextClass();
+      }
+
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+
+      return audioContext;
+    }
+
+    function playSound(type = "hover") {
+      const ctx = getAudioContext();
+
+      if (!ctx) return;
+
+      const now = ctx.currentTime;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === "click") {
+        // เสียงคลิก
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(650, now);
+        oscillator.frequency.exponentialRampToValueAtTime(
+          280,
+          now + 0.09
+        );
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(
+          0.22,
+          now + 0.01
+        );
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 0.12
+        );
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.13);
+
+      } else {
+        // เสียงตอนเมาส์ชี้
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(850, now);
+        oscillator.frequency.exponentialRampToValueAtTime(
+          1100,
+          now + 0.045
+        );
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(
+          0.09,
+          now + 0.008
+        );
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 0.065
+        );
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.07);
+      }
+    }
+
+    const buttons = document.querySelectorAll(".menu-button");
+
+    buttons.forEach((button) => {
+      // เสียงและเอฟเฟกต์ตอนเมาส์ชี้
+      button.addEventListener("mouseenter", () => {
+        playSound("hover");
+
+        button.classList.remove("bounce");
+
+        // เริ่มแอนิเมชันใหม่
+        void button.offsetWidth;
+
+        button.classList.add("bounce");
+      });
+
+      // เสียงตอนคลิก
+      button.addEventListener("pointerdown", () => {
+        playSound("click");
+      });
+
+      // ล้างคลาสเมื่อแอนิเมชันจบ
+      button.addEventListener("animationend", () => {
+        button.classList.remove("bounce");
+      });
+    });
+
+    // พยายามเริ่มเล่นวิดีโอพื้นหลัง
+    const video = document.getElementById("bg-video");
+
+    video.play().catch(() => {
+      // บางเบราว์เซอร์อาจรอให้ผู้ใช้โต้ตอบก่อน
+    });
+  </script>
 
 </body>
-
 </html>
