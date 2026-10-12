@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,10 @@
   <title>Give & Grow</title>
 
   <style>
+    /* =========================
+       พื้นฐาน
+       ========================= */
+
     * {
       margin: 0;
       padding: 0;
@@ -23,7 +28,10 @@
       background: #000;
     }
 
-    /* วิดีโอพื้นหลัง */
+    /* =========================
+       วิดีโอพื้นหลัง
+       ========================= */
+
     #bg-video {
       position: fixed;
       inset: 0;
@@ -32,27 +40,41 @@
       height: 100%;
 
       object-fit: cover;
-      object-position: center;
+      object-position: center center;
 
-      filter: none;
+      filter:
+        saturate(1.22)
+        contrast(1.08)
+        brightness(1.05);
+
       opacity: 1;
 
       z-index: 0;
       pointer-events: none;
+
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      will-change: transform;
     }
 
-    /* ชั้นปรับความมืดของพื้นหลัง */
+    /* =========================
+       ชั้นทับวิดีโอ
+       ========================= */
+
     .overlay {
       position: fixed;
       inset: 0;
 
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(0, 0, 0, 0.03);
 
       z-index: 1;
       pointer-events: none;
     }
 
-    /* พื้นที่วางปุ่ม */
+    /* =========================
+       พื้นที่ปุ่ม
+       ========================= */
+
     .menu {
       position: relative;
       z-index: 2;
@@ -68,7 +90,10 @@
       padding: 20px;
     }
 
-    /* ปุ่มแต่ละปุ่ม */
+    /* =========================
+       ปุ่มแต่ละปุ่ม
+       ========================= */
+
     .menu-button {
       display: block;
       position: relative;
@@ -94,7 +119,10 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* รูปบนปุ่ม */
+    /* =========================
+       รูปบนปุ่ม
+       ========================= */
+
     .menu-button img {
       display: block;
 
@@ -102,17 +130,20 @@
       height: auto;
 
       object-fit: contain;
-
       user-select: none;
       -webkit-user-drag: none;
 
-      filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.18))
-              drop-shadow(0 14px 18px rgba(0, 0, 0, 0.22));
+      filter:
+        drop-shadow(0 8px 0 rgba(0, 0, 0, 0.18))
+        drop-shadow(0 14px 18px rgba(0, 0, 0, 0.22));
 
       transition: filter 0.25s ease;
     }
 
-    /* เอฟเฟกต์เมื่อเอาเมาส์ชี้ */
+    /* =========================
+       เอฟเฟกต์ตอนเอาเมาส์ชี้
+       ========================= */
+
     .menu-button:hover {
       transform:
         perspective(800px)
@@ -125,11 +156,16 @@
     }
 
     .menu-button:hover img {
-      filter: drop-shadow(0 15px 0 rgba(0, 0, 0, 0.15))
-              drop-shadow(0 25px 25px rgba(0, 0, 0, 0.3));
+      filter:
+        drop-shadow(0 15px 0 rgba(0, 0, 0, 0.15))
+        drop-shadow(0 0 18px rgba(0, 240, 255, 0.85))
+        drop-shadow(0 25px 25px rgba(0, 0, 0, 0.3));
     }
 
-    /* เอฟเฟกต์ตอนกด */
+    /* =========================
+       เอฟเฟกต์ตอนกด
+       ========================= */
+
     .menu-button:active {
       transform:
         perspective(800px)
@@ -137,10 +173,14 @@
         scale(0.94);
 
       filter: brightness(0.95);
+
       transition: transform 0.08s ease;
     }
 
-    /* เอฟเฟกต์เด้ง */
+    /* =========================
+       เอฟเฟกต์เด้ง
+       ========================= */
+
     @keyframes popupBounce {
       0% {
         transform: translateY(0) scale(1);
@@ -167,7 +207,31 @@
       animation: popupBounce 0.48s ease;
     }
 
-    /* หน้าจอแท็บเล็ต */
+    /* =========================
+       แสงสีบนวิดีโอ
+       ========================= */
+
+    .menu::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 255, 255, 0.04),
+          transparent 55%
+        );
+
+      z-index: -1;
+    }
+
+    /* =========================
+       หน้าจอแท็บเล็ต
+       ========================= */
+
     @media (max-width: 900px) {
       .menu {
         gap: 16px;
@@ -178,11 +242,15 @@
       }
     }
 
-    /* หน้าจอมือถือ */
+    /* =========================
+       หน้าจอมือถือ
+       ========================= */
+
     @media (max-width: 600px) {
       .menu {
         flex-direction: column;
         justify-content: center;
+
         gap: 12px;
         padding: 15px;
       }
@@ -196,7 +264,84 @@
       }
     }
 
-    /* ลดการเคลื่อนไหวตามการตั้งค่าของผู้ใช้ */
+    /* =========================
+       แจ้งเตือนให้หมุนโทรศัพท์
+       แสดงเฉพาะจอสัมผัสแนวตั้ง
+       ========================= */
+
+    #rotate-notice {
+      display: none;
+    }
+
+    @media screen
+      and (orientation: portrait)
+      and (max-width: 600px)
+      and (hover: none)
+      and (pointer: coarse) {
+
+      #rotate-notice {
+        position: fixed;
+        inset: 0;
+
+        z-index: 99999;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        gap: 16px;
+        padding: 25px;
+
+        text-align: center;
+        color: #fff;
+
+        background:
+          radial-gradient(
+            circle at 50% 20%,
+            #075985,
+            #071a2b 75%
+          );
+      }
+
+      #rotate-notice .rotate-phone {
+        font-size: 65px;
+
+        animation:
+          rotate-notice-icon 1.5s ease-in-out infinite;
+      }
+
+      #rotate-notice h2 {
+        font-size: 25px;
+        color: #00e5ff;
+      }
+
+      #rotate-notice p {
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      #rotate-notice span {
+        font-size: 13px;
+        line-height: 1.7;
+        color: #b8eaff;
+      }
+    }
+
+    @keyframes rotate-notice-icon {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(-90deg);
+      }
+    }
+
+    /* =========================
+       ลดการเคลื่อนไหว
+       ========================= */
+
     @media (prefers-reduced-motion: reduce) {
       .menu-button,
       .menu-button img {
@@ -206,13 +351,39 @@
       .menu-button.bounce {
         animation: none;
       }
+
+      #rotate-notice .rotate-phone {
+        animation: none;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- วิดีโอพื้นหลัง -->
+  <!-- =========================
+       แจ้งเตือนหมุนโทรศัพท์
+       ========================= -->
+
+  <div id="rotate-notice">
+    <div class="rotate-phone" aria-hidden="true">📱</div>
+
+    <h2>หมุนจอเป็นแนวนอน</h2>
+
+    <p>
+      เพื่อประสบการณ์การใช้งาน
+      Give &amp; Grow ที่ดีที่สุด
+    </p>
+
+    <span>
+      โปรดหมุนโทรศัพท์ของคุณก่อนเริ่มใช้งาน
+    </span>
+  </div>
+
+  <!-- =========================
+       วิดีโอพื้นหลัง
+       ========================= -->
+
   <video
     id="bg-video"
     autoplay
@@ -221,51 +392,73 @@
     playsinline
     preload="auto"
   >
-    <source src="background_muted.mp4" type="video/mp4">
+    <source
+      src="background_muted.mp4"
+      type="video/mp4"
+    >
+
     เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
   </video>
 
+  <!-- ชั้นโปร่งใส -->
   <div class="overlay"></div>
 
-  <!-- ปุ่มเมนู -->
+  <!-- =========================
+       ปุ่มเมนู
+       ========================= -->
+
   <main class="menu">
 
+    <!-- ปุ่มเข้าเกม -->
     <a
       class="menu-button"
       href="waiting-game.html"
       aria-label="เล่นเกม"
     >
-      <img src="game.png" alt="Game">
+      <img
+        src="game.png"
+        alt="Game"
+      >
     </a>
 
+    <!-- ปุ่มลงทะเบียน -->
     <a
       class="menu-button"
       href="register.html"
       aria-label="ลงทะเบียน"
     >
-      <img src="register.png" alt="Register">
+      <img
+        src="register.png"
+        alt="Register"
+      >
     </a>
 
+    <!-- ปุ่มแบ่งปัน -->
     <a
       class="menu-button"
       href="share.html"
       aria-label="แบ่งปัน"
     >
-      <img src="share.png" alt="Share">
+      <img
+        src="share.png"
+        alt="Share"
+      >
     </a>
 
   </main>
 
   <script>
-    // เล่นเสียงด้วย Web Audio API
-    // ไม่ต้องใช้ไฟล์เสียงเพิ่มเติม
+    /* =========================
+       ระบบเสียง
+       ========================= */
 
     let audioContext = null;
 
     function getAudioContext() {
       if (!audioContext) {
         const AudioContextClass =
-          window.AudioContext || window.webkitAudioContext;
+          window.AudioContext ||
+          window.webkitAudioContext;
 
         if (!AudioContextClass) {
           return null;
@@ -287,26 +480,37 @@
       if (!ctx) return;
 
       const now = ctx.currentTime;
+
       const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
 
       oscillator.connect(gain);
       gain.connect(ctx.destination);
 
+      /* เสียงคลิก */
       if (type === "click") {
-        // เสียงคลิก
         oscillator.type = "sine";
-        oscillator.frequency.setValueAtTime(650, now);
+
+        oscillator.frequency.setValueAtTime(
+          650,
+          now
+        );
+
         oscillator.frequency.exponentialRampToValueAtTime(
           280,
           now + 0.09
         );
 
-        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.setValueAtTime(
+          0.0001,
+          now
+        );
+
         gain.gain.exponentialRampToValueAtTime(
           0.22,
           now + 0.01
         );
+
         gain.gain.exponentialRampToValueAtTime(
           0.0001,
           now + 0.12
@@ -314,21 +518,32 @@
 
         oscillator.start(now);
         oscillator.stop(now + 0.13);
+      }
 
-      } else {
-        // เสียงตอนเมาส์ชี้
+      /* เสียง Hover */
+      else {
         oscillator.type = "sine";
-        oscillator.frequency.setValueAtTime(850, now);
+
+        oscillator.frequency.setValueAtTime(
+          850,
+          now
+        );
+
         oscillator.frequency.exponentialRampToValueAtTime(
           1100,
           now + 0.045
         );
 
-        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.setValueAtTime(
+          0.0001,
+          now
+        );
+
         gain.gain.exponentialRampToValueAtTime(
           0.09,
           now + 0.008
         );
+
         gain.gain.exponentialRampToValueAtTime(
           0.0001,
           now + 0.065
@@ -339,37 +554,57 @@
       }
     }
 
-    const buttons = document.querySelectorAll(".menu-button");
+    /* =========================
+       ปุ่มทั้งหมด
+       ========================= */
+
+    const buttons = document.querySelectorAll(
+      ".menu-button"
+    );
 
     buttons.forEach((button) => {
-      // เสียงและเอฟเฟกต์ตอนเมาส์ชี้
-      button.addEventListener("mouseenter", () => {
-        playSound("hover");
 
-        button.classList.remove("bounce");
+      /* Hover */
+      button.addEventListener(
+        "mouseenter",
+        () => {
+          playSound("hover");
 
-        // เริ่มแอนิเมชันใหม่
-        void button.offsetWidth;
+          button.classList.remove("bounce");
 
-        button.classList.add("bounce");
-      });
+          void button.offsetWidth;
 
-      // เสียงตอนคลิก
-      button.addEventListener("pointerdown", () => {
-        playSound("click");
-      });
+          button.classList.add("bounce");
+        }
+      );
 
-      // ล้างคลาสเมื่อแอนิเมชันจบ
-      button.addEventListener("animationend", () => {
-        button.classList.remove("bounce");
-      });
+      /* คลิก */
+      button.addEventListener(
+        "pointerdown",
+        () => {
+          playSound("click");
+        }
+      );
+
+      /* จบ Animation */
+      button.addEventListener(
+        "animationend",
+        () => {
+          button.classList.remove("bounce");
+        }
+      );
     });
 
-    // พยายามเริ่มเล่นวิดีโอพื้นหลัง
-    const video = document.getElementById("bg-video");
+    /* =========================
+       เริ่มวิดีโอ
+       ========================= */
+
+    const video = document.getElementById(
+      "bg-video"
+    );
 
     video.play().catch(() => {
-      // บางเบราว์เซอร์อาจรอให้ผู้ใช้โต้ตอบก่อน
+      /* บางเบราว์เซอร์อาจรอให้ผู้ใช้โต้ตอบก่อน */
     });
   </script>
 
