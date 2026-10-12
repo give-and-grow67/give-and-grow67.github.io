@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Give & Grow</title>
+  <title>Give &amp; Grow</title>
 
   <style>
     /* =========================
@@ -34,20 +34,14 @@
     #bg-video {
       position: fixed;
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       object-fit: cover;
       object-position: center center;
 
-      filter:
-        saturate(1.22)
-        contrast(1.08)
-        brightness(1.05);
+      filter: saturate(1.22) contrast(1.08) brightness(1.05);
 
       opacity: 1;
-
       z-index: 0;
       pointer-events: none;
 
@@ -63,9 +57,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-
       background: rgba(0, 0, 0, 0.03);
-
       z-index: 1;
       pointer-events: none;
     }
@@ -80,6 +72,7 @@
 
       width: 100%;
       height: 100vh;
+      height: 100dvh;
 
       display: flex;
       justify-content: center;
@@ -124,7 +117,6 @@
 
     .menu-button img {
       display: block;
-
       width: 100%;
       height: auto;
 
@@ -172,7 +164,6 @@
         scale(0.94);
 
       filter: brightness(0.95);
-
       transition: transform 0.08s ease;
     }
 
@@ -228,7 +219,7 @@
     }
 
     /* =========================
-       หน้าจอแท็บเล็ต
+       หน้าจอขนาดเล็ก
        ========================= */
 
     @media (max-width: 900px) {
@@ -242,14 +233,13 @@
     }
 
     /* =========================
-       หน้าจอมือถือ
+       หน้าจอแคบ
        ========================= */
 
     @media (max-width: 600px) {
       .menu {
         flex-direction: column;
         justify-content: center;
-
         gap: 12px;
         padding: 15px;
       }
@@ -264,67 +254,61 @@
     }
 
     /* =========================
-       แจ้งเตือนให้หมุนโทรศัพท์
-       แสดงเฉพาะจอสัมผัสแนวตั้ง
+       แจ้งเตือนเมื่อหน้าจอแนวตั้ง
        ========================= */
 
     #rotate-notice {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+
       display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      padding: 24px;
+      text-align: center;
+      color: #fff;
+
+      background:
+        radial-gradient(
+          circle at 50% 20%,
+          #075985,
+          #071a2b 75%
+        );
     }
 
-    @media screen
-      and (orientation: portrait)
-      and (max-width: 600px)
-      and (hover: none)
-      and (pointer: coarse) {
+    #rotate-notice.show {
+      display: flex;
+    }
 
-      #rotate-notice {
-        position: fixed;
-        inset: 0;
+    #rotate-notice .rotate-phone {
+      font-size: clamp(48px, 10vw, 65px);
+      animation: rotate-notice-icon 1.5s ease-in-out infinite;
+    }
 
-        z-index: 99999;
+    #rotate-notice h2 {
+      font-size: clamp(20px, 4vw, 25px);
+      color: #00e5ff;
+    }
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+    #rotate-notice p {
+      max-width: 500px;
+      font-size: clamp(14px, 3vw, 17px);
+      line-height: 1.6;
+    }
 
-        gap: 16px;
-        padding: 25px;
-
-        text-align: center;
-        color: #fff;
-
-        background:
-          radial-gradient(
-            circle at 50% 20%,
-            #075985,
-            #071a2b 75%
-          );
-      }
-
-      #rotate-notice .rotate-phone {
-        font-size: 65px;
-
-        animation:
-          rotate-notice-icon 1.5s ease-in-out infinite;
-      }
-
-      #rotate-notice h2 {
-        font-size: 25px;
-        color: #00e5ff;
-      }
-
-      #rotate-notice p {
-        font-size: 17px;
-        line-height: 1.6;
-      }
-
-      #rotate-notice span {
-        font-size: 13px;
-        line-height: 1.7;
-        color: #b8eaff;
-      }
+    #rotate-notice span {
+      max-width: 500px;
+      font-size: clamp(12px, 2.5vw, 13px);
+      line-height: 1.7;
+      color: #b8eaff;
     }
 
     @keyframes rotate-notice-icon {
@@ -360,11 +344,9 @@
 
 <body>
 
-  <!-- =========================
-       แจ้งเตือนหมุนโทรศัพท์
-       ========================= -->
+  <!-- แจ้งเตือนให้หมุนจอ -->
 
-  <div id="rotate-notice">
+  <div id="rotate-notice" role="status" aria-live="polite">
     <div class="rotate-phone" aria-hidden="true">📱</div>
 
     <h2>หมุนจอเป็นแนวนอน</h2>
@@ -375,13 +357,11 @@
     </p>
 
     <span>
-      โปรดหมุนโทรศัพท์ของคุณก่อนเริ่มใช้งาน
+      โปรดหมุนหน้าจอของคุณก่อนเริ่มใช้งาน
     </span>
   </div>
 
-  <!-- =========================
-       วิดีโอพื้นหลัง
-       ========================= -->
+  <!-- วิดีโอพื้นหลัง -->
 
   <video
     id="bg-video"
@@ -391,62 +371,114 @@
     playsinline
     preload="auto"
   >
-    <source
-      src="background_muted.mp4"
-      type="video/mp4"
-    >
-
+    <source src="background_muted.mp4" type="video/mp4">
     เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
   </video>
 
   <!-- ชั้นโปร่งใส -->
+
   <div class="overlay"></div>
 
-  <!-- =========================
-       ปุ่มเมนู
-       ========================= -->
+  <!-- ปุ่มเมนู -->
 
   <main class="menu">
 
     <!-- ปุ่มเข้าเกม -->
+
     <a
       class="menu-button"
       href="waiting-game.html"
       aria-label="เล่นเกม"
     >
-      <img
-        src="game.png"
-        alt="Game"
-      >
+      <img src="game.png" alt="Game">
     </a>
 
     <!-- ปุ่มลงทะเบียน -->
+
     <a
       class="menu-button"
       href="register.html"
       aria-label="ลงทะเบียน"
     >
-      <img
-        src="register.png"
-        alt="Register"
-      >
+      <img src="register.png" alt="Register">
     </a>
 
     <!-- ปุ่มแบ่งปัน -->
+
     <a
       class="menu-button"
       href="share.html"
       aria-label="แบ่งปัน"
     >
-      <img
-        src="share.png"
-        alt="Share"
-      >
+      <img src="share.png" alt="Share">
     </a>
 
   </main>
 
   <script>
+    /* =========================
+       ตรวจจับแนวหน้าจอ
+       แสดงข้อความ 10 วินาที
+       ========================= */
+
+    const rotateNotice =
+      document.getElementById("rotate-notice");
+
+    let noticeTimer = null;
+
+    function checkScreenOrientation() {
+      const isPortrait =
+        window.matchMedia("(orientation: portrait)").matches;
+
+      if (isPortrait) {
+        // แสดงข้อความเตือน
+        rotateNotice.classList.add("show");
+
+        // เริ่มนับเวลาใหม่ 10 วินาที
+        clearTimeout(noticeTimer);
+
+        noticeTimer = setTimeout(() => {
+          rotateNotice.classList.remove("show");
+        }, 10000);
+
+      } else {
+        // แนวนอนให้ซ่อนทันที
+        rotateNotice.classList.remove("show");
+        clearTimeout(noticeTimer);
+      }
+    }
+
+    // ตรวจสอบทันทีเมื่อเปิดเว็บไซต์
+    checkScreenOrientation();
+
+    // ตรวจสอบเมื่อปรับขนาดหน้าต่าง
+    window.addEventListener(
+      "resize",
+      checkScreenOrientation
+    );
+
+    // ตรวจสอบเมื่อหมุนหน้าจอ
+    window.addEventListener(
+      "orientationchange",
+      checkScreenOrientation
+    );
+
+    if (window.matchMedia) {
+      const orientationQuery =
+        window.matchMedia("(orientation: portrait)");
+
+      if (orientationQuery.addEventListener) {
+        orientationQuery.addEventListener(
+          "change",
+          checkScreenOrientation
+        );
+      } else if (orientationQuery.addListener) {
+        orientationQuery.addListener(
+          checkScreenOrientation
+        );
+      }
+    }
+
     /* =========================
        ระบบเสียง
        ========================= */
@@ -479,7 +511,6 @@
       if (!ctx) return;
 
       const now = ctx.currentTime;
-
       const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -487,6 +518,7 @@
       gain.connect(ctx.destination);
 
       /* เสียงคลิก */
+
       if (type === "click") {
         oscillator.type = "sine";
 
@@ -500,10 +532,7 @@
           now + 0.09
         );
 
-        gain.gain.setValueAtTime(
-          0.0001,
-          now
-        );
+        gain.gain.setValueAtTime(0.0001, now);
 
         gain.gain.exponentialRampToValueAtTime(
           0.22,
@@ -520,6 +549,7 @@
       }
 
       /* เสียง Hover */
+
       else {
         oscillator.type = "sine";
 
@@ -533,10 +563,7 @@
           now + 0.045
         );
 
-        gain.gain.setValueAtTime(
-          0.0001,
-          now
-        );
+        gain.gain.setValueAtTime(0.0001, now);
 
         gain.gain.exponentialRampToValueAtTime(
           0.09,
@@ -557,53 +584,43 @@
        ปุ่มทั้งหมด
        ========================= */
 
-    const buttons = document.querySelectorAll(
-      ".menu-button"
-    );
+    const buttons =
+      document.querySelectorAll(".menu-button");
 
     buttons.forEach((button) => {
 
-      /* Hover */
-      button.addEventListener(
-        "mouseenter",
-        () => {
-          playSound("hover");
+      // เมื่อเอาเมาส์ชี้
+      button.addEventListener("mouseenter", () => {
+        playSound("hover");
 
-          button.classList.remove("bounce");
+        button.classList.remove("bounce");
 
-          void button.offsetWidth;
+        void button.offsetWidth;
 
-          button.classList.add("bounce");
-        }
-      );
+        button.classList.add("bounce");
+      });
 
-      /* คลิก */
-      button.addEventListener(
-        "pointerdown",
-        () => {
-          playSound("click");
-        }
-      );
+      // เมื่อกดปุ่ม
+      button.addEventListener("pointerdown", () => {
+        playSound("click");
+      });
 
-      /* จบ Animation */
-      button.addEventListener(
-        "animationend",
-        () => {
-          button.classList.remove("bounce");
-        }
-      );
+      // เมื่อจบ Animation
+      button.addEventListener("animationend", () => {
+        button.classList.remove("bounce");
+      });
+
     });
 
     /* =========================
        เริ่มวิดีโอ
        ========================= */
 
-    const video = document.getElementById(
-      "bg-video"
-    );
+    const video =
+      document.getElementById("bg-video");
 
     video.play().catch(() => {
-      /* บางเบราว์เซอร์อาจรอให้ผู้ใช้โต้ตอบก่อน */
+      // บางเบราว์เซอร์อาจรอให้ผู้ใช้โต้ตอบก่อน
     });
   </script>
 
